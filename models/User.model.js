@@ -30,7 +30,7 @@ const UserSchema = new Schema({
       ref: "Trip",
     },
   ],
-  CurrentTrip: {
+  currentTrip: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Trip",
   },

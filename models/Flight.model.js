@@ -2,32 +2,32 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const FlightSchema = new Schema({
-  To: {
+  to: {
     type: String,
   },
-  From: {
+  from: {
     type: String,
   },
-  Departure: {
+  departure: {
     type: Date,
   },
-  Arrival: {
+  arrival: {
     type: Date,
   },
-  Gate: {
+  gate: {
     type: String,
   },
-  Seats: [
+  seats: [
     [
       {
         type: Boolean,
       },
     ],
   ],
-  Status: {
+  status: {
     type: String,
   },
-  Plane: {
+  plane: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Plane",
   },
