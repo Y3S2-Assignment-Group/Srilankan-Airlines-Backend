@@ -5,10 +5,10 @@ const getUserDetails = async (req, res) => {
   try {
     //get user details
     //-password : dont return the pasword
-    const user = await Employee.findById(req.body.id)
+    const user = await User.findById(req.body.id)
       .select("-password")
       .populate({ path: "prevTrips", model: "Trip" })
-      .populate({ path: "CurrentTrip", model: "Trip" })
+      .populate({ path: "currentTrip", model: "Trip" })
       .populate({ path: "scheduledTrips", model: "Trip" });
     res.json(user);
   } catch (err) {
