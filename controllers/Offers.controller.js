@@ -14,10 +14,11 @@ const getAllOffers = async (req, res) => {
   }
 };
 
+//get single offer
 const viewOffer = async (req, res) => {
   try {
-    const offers = await Offer.find("id");
-    res.json(offers);
+    const singleOffer = await Offer.findById(req.params.id);
+    res.json(singleOffer);
   } catch (err) {
     console.log(err.message);
     res.status(500).send("Server Error");
