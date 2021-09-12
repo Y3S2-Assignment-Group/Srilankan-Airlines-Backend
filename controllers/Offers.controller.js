@@ -25,7 +25,34 @@ const viewOffer = async (req, res) => {
   }
 }
 
+const addOffers = async (req, res) => {
+  const { destination, percentages, ticketPrice, destinationImg, flightRefFlight } = req.body;
+
+  try {
+    //create a user instance
+    const offers = new Feedback({
+      destination, 
+      percentages, 
+      ticketPrice, 
+      destinationImg, 
+      flightRefFlight,
+    });
+
+    //save user to the database
+    await offers.save()
+      .then(async (offer) => {
+        res.json(offer);
+      })
+      .catch((err) => res.status(400).json("Error: " + err));
+  } catch (err) {
+    //Something wrong with the server
+    console.log(err.message);
+    return res.status(500).send("Server Error");
+  }
+};
+
 module.exports = {
   getAllOffers,
   viewOffer,
+  addOffers,
 };
