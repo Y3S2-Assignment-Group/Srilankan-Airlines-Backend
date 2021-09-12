@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const TripSchema = new Schema({
-  class: {
+  flightClass: {
     type: String,
   },
   seatNo: {
