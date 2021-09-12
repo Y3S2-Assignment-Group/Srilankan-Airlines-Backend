@@ -2,20 +2,20 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const TripSchema = new Schema({
-  Class: {
+  class: {
     type: String,
   },
   seatNo: {
     type: String,
   },
-  Flight: {
+  flight: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Flight",
   },
-  CheckinStatus: {
+  checkinStatus: {
     type: Boolean,
   },
-  BookingStatus: {
+  bookingStatus: {
     type: Boolean,
   },
 });
