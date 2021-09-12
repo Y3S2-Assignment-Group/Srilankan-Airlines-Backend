@@ -18,11 +18,10 @@ const FlightSchema = new Schema({
     type: String,
   },
   seats: [
-    [
-      {
-        type: Boolean,
-      },
-    ],
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Seat",
+    },
   ],
   status: {
     type: String,

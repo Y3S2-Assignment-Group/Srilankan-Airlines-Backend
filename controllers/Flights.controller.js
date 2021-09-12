@@ -1,6 +1,19 @@
 const Flight = require("../models/Trip.model");
 const Plane = require("../models/Plane.model");
 
+
+//get all flights
+const getFlightList = async (req, res) => {
+  try {
+    const flights = await Flight.find()
+      .populate({ path: "seats", model: "Seat" })
+    res.json(flights);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
 //Insert plane to the system
 const addFlight = async (req, res) => {
   const { to, from, departure, arrival, gate, plane } = req.body;

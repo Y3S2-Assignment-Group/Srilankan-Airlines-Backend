@@ -26,5 +26,5 @@ const addFeedback = async (req, res) => {
   };
   
   module.exports = {
-    addPlane,
+    addFeedback,
   };

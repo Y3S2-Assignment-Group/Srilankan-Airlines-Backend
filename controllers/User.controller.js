@@ -1,6 +1,7 @@
 const User = require("../models/User.model");
 const Flight = require("../models/Flight.model");
 const Trip = require("../models/Trip.model");
+const Seat = require("../models/Seat.model");
 
 //get User details
 const getUserDetails = async (req, res) => {
@@ -43,6 +44,45 @@ const bookTrip = async (req, res) => {
             existingUser.currentTrip = insertedTrip;
           }
         );
+        //09A
+        //todo:mark seat in trip
+        let xVal = 0;
+        switch (seatNo.substring(2, 3)) {
+          case "A":
+            xVal = 0;
+            break;
+          case "B":
+            xVal = 1;
+            break;
+          case "C":
+            xVal = 2;
+            break;
+          case "D":
+            xVal = 3;
+            break;
+          case "E":
+            xVal = 4;
+            break;
+          case "F":
+            xVal = 5;
+            break;
+          case "G":
+            xVal = 6;
+            break;
+          case "H":
+            xVal = 7;
+            break;
+          case "I":
+            xVal = 8;
+            break;
+        }
+        const seat = new Seat({
+          xAxis: xVal,
+          yAxis: Number(seatNo.substring(0, 2)),
+          flight: insertedTrip.flight,
+        });
+        insertedTrip.flight.seats.un;
+
         user
           .save()
           .then(() => {
