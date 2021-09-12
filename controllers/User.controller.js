@@ -21,7 +21,7 @@ const getUserDetails = async (req, res) => {
 
 //book flights
 const bookTrip = async (req, res) => {
-  const { flightClass, seatNo, flight } = req.body;
+  const { email, flightClass, seatNo, flight } = req.body;
 
   try {
     //create a user instance
@@ -38,8 +38,19 @@ const bookTrip = async (req, res) => {
       .save()
       .then(async (insertedTrip) => {
         //todo: add to users current trip
-        res.json(insertedTrip);
-
+        const user = User.findOneAndUpdate({ email: email }).then(
+          (existingUser) => {
+            existingUser.currentTrip = insertedTrip;
+          }
+        );
+        user
+          .save()
+          .then(() => {
+            res.json(insertedTrip);
+          })
+          .catch((err) => {
+            res.json(err);
+          });
       })
       .catch((err) => res.status(400).json("Error: " + err));
   } catch (err) {
@@ -53,6 +64,7 @@ const bookTrip = async (req, res) => {
 const checkinTrip = async (req, res) => {
   try {
     const trip = await Trip.findById(req.params.id);
+    const { email } = req.body;
 
     if (trip != null) {
       trip.findByIdAndUpdate(req.params.id).then(async (existingTrip) => {
@@ -62,7 +74,13 @@ const checkinTrip = async (req, res) => {
           .save()
           .then((response) => {
             //todo:remove from users current and add to prev
-            res.json(response);
+            let user = User.findOneAndUpdate({ email: email }).then(
+              (existingUser) => {
+                existingUser.currentTrip = null;
+                existingUser.prevTrips.unshift(trip);
+              }
+            );
+            await user.save();
           })
           .catch((err) => res.status(400).json("Error: " + err));
       });
@@ -107,5 +125,5 @@ module.exports = {
   getUserDetails,
   bookTrip,
   checkinTrip,
-  scheduleTrips
+  scheduleTrips,
 };

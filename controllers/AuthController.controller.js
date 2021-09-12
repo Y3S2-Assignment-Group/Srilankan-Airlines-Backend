@@ -4,18 +4,6 @@ const jwt = require("jsonwebtoken");
 const config = require("config");
 const { OAuth2Client } = require("google-auth-library");
 
-//get User details
-const getUserDetails = async (req, res) => {
-  try {
-    //get user details
-    //-password : dont return the pasword
-    const user = await User.findById(req.user.id).select("-password");
-    res.json(user);
-  } catch {
-    console.log(err.message);
-    res.status(500).send("Server Error");
-  }
-};
 
 //Login User With Google
 const loginUserWithGoogle = async (req, res) => {
