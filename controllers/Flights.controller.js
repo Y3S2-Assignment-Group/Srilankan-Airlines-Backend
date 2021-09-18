@@ -77,4 +77,5 @@ const updateFlightStatus = async (req, res) => {
 module.exports = {
   addFlight,
   updateFlightStatus,
+  getFlightList,
 };

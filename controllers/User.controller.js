@@ -112,7 +112,7 @@ const checkinTrip = async (req, res) => {
 
         existingTrip
           .save()
-          .then((response) => {
+          .then(async (response) => {
             //todo:remove from users current and add to prev
             let user = User.findOneAndUpdate({ email: email }).then(
               (existingUser) => {
