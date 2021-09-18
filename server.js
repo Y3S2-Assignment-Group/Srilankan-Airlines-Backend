@@ -19,8 +19,6 @@ app.get("/", (req, res) => res.send("Sri Lankan Airline Backend Api Running"));
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
-
 //API routes
 
 //-------Feedback-----------
@@ -41,5 +39,4 @@ app.use("/api/trip", require("./routes/Trip.routes"));
 //-------User---------------
 app.use("/api/user", require("./routes/User.routes"));
 
-
-
+app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

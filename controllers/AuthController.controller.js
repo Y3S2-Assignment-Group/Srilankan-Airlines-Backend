@@ -4,6 +4,51 @@ const jwt = require("jsonwebtoken");
 const config = require("config");
 const { OAuth2Client } = require("google-auth-library");
 
+
+//Authenticate user and get token
+const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    //See if user Exist
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({ errors: [{ msg: "Invalid Credentials" }] });
+    }
+
+    //match the user email and password
+
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return res.status(400).json({ errors: [{ msg: "Invalid Credentials" }] });
+    }
+
+    //Return jsonwebtoken
+
+    const payload = {
+      user: {
+        id: user.id,
+      },
+    };
+
+    jwt.sign(
+      payload,
+      config.get("jwtSecret"),
+      { expiresIn: 360000 },
+      (err, token) => {
+        if (err) throw err;
+        res.json({ token });
+      }
+    );
+  } catch (err) {
+    //Something wrong with the server
+    console.error(err.message);
+    return res.status(500).send("Server Error");
+  }
+};
+
 //Login User With Google
 const loginUserWithGoogle = async (req, res) => {
   const { tokenId } = req.body;
@@ -117,4 +162,4 @@ const registerUser = async (req, res) => {
   }
 };
 
-module.exports = {loginUserWithGoogle,registerUser };
+module.exports = {loginUser,loginUserWithGoogle,registerUser };

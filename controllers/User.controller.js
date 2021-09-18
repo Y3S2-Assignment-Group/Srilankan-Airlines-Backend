@@ -3,8 +3,26 @@ const Flight = require("../models/Flight.model");
 const Trip = require("../models/Trip.model");
 const Seat = require("../models/Seat.model");
 
+
 //get User details
 const getUserDetails = async (req, res) => {
+  try {
+    //get user details
+    //-password : dont return the pasword
+    const user = await User.findById(req.user.id)
+      .select("-password")
+      .populate({ path: "prevTrips", model: "Trip" })
+      .populate({ path: "currentTrip", model: "Trip" })
+      .populate({ path: "scheduledTrips", model: "Trip" });
+    res.json(user);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+//get User details
+const getUserDetailsByUserId = async (req, res) => {
   try {
     //get user details
     //-password : dont return the pasword
@@ -163,6 +181,7 @@ const scheduleTrips = async (req, res) => {
 };
 module.exports = {
   getUserDetails,
+  getUserDetailsByUserId,
   bookTrip,
   checkinTrip,
   scheduleTrips,

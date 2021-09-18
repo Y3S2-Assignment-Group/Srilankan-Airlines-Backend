@@ -3,6 +3,7 @@ const router = express.Router();
 const auth = require("../middleware/auth");
 
 const {
+    getUserDetailsByUserId,
     getUserDetails,
     bookTrip,
     checkinTrip,
@@ -10,14 +11,18 @@ const {
 } = require("../controllers/User.controller");
 
 const {
-    loginUserWithGoogle, registerUser
+    loginUser,loginUserWithGoogle, registerUser
 } = require("../controllers/AuthController.controller");
 
-router.get("/login", loginUserWithGoogle);
+router.post("/login", loginUser);
 
-router.get("/register", registerUser);
+router.post("/loginwithgoogle", loginUserWithGoogle);
 
-router.get("/details/:id", getUserDetails);
+router.post("/register", registerUser);
+
+router.get("/",auth, getUserDetails);
+
+router.get("/details/:id", getUserDetailsByUserId);
 
 router.post("/bookTrip", bookTrip);
 
