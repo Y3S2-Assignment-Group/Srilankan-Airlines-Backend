@@ -1,10 +1,35 @@
 const Plane = require("../models/Plane.model");
 
+//get plane by Id
+const getPlaneById = async (req, res) => {
+  try {
+    Plane.findById(req.params.id).populate({
+      path: "flight",
+      populate: {
+        path: "seats",
+      },
+    }).then((plane) => {
+      res.json(plane);
+    });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
 //get all planes
 const getPlaneList = async (req, res) => {
   try {
-    const plane = await Plane.find();
-    res.json(plane);
+    Plane.find()
+      .populate({
+        path: "flight",
+        populate: {
+          path: "seats",
+        },
+      })
+      .then((plans) => {
+        res.json(plans);
+      });
   } catch (err) {
     console.log(err.message);
     res.status(500).send("Server Error");
@@ -24,7 +49,8 @@ const addPlane = async (req, res) => {
     });
 
     //save user to the database
-    await plane.save()
+    await plane
+      .save()
       .then(async (insertedPlane) => {
         res.json(insertedPlane);
       })
@@ -38,5 +64,6 @@ const addPlane = async (req, res) => {
 
 module.exports = {
   addPlane,
-  getPlaneList
+  getPlaneList,
+  getPlaneById,
 };

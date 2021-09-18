@@ -96,26 +96,32 @@ const bookTrip = async (req, res) => {
             flight: insertedTrip.flight,
           });
 
+          console.log("seat",seat);
+
           await Flight.findByIdAndUpdate(insertedTrip.flight).then(
             (existingFlight) => {
-              //console.log(existingFlight);
-              existingFlight.seats.unshift(seat);
+              console.log("existingFlight",existingFlight);
 
-              existingFlight
-                .save()
-                .then(() => {
-                  existingUser
-                    .save()
-                    .then(() => {
-                      res.json(insertedTrip);
-                    })
-                    .catch((err) => {
-                      res.json(err);
-                    });
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
+              seat.save().then((newSeat)=>{
+                existingFlight.seats.unshift(newSeat);
+
+                existingFlight
+                  .save()
+                  .then(() => {
+                    existingUser
+                      .save()
+                      .then(() => {
+                        res.json(insertedTrip);
+                      })
+                      .catch((err) => {
+                        res.json(err);
+                      });
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
+              })
+   
             }
           );
         });
@@ -132,23 +138,26 @@ const bookTrip = async (req, res) => {
 const checkinTrip = async (req, res) => {
   try {
     const trip = await Trip.findById(req.params.id);
-    const { email } = req.body;
 
     if (trip != null) {
-      trip.findByIdAndUpdate(req.params.id).then(async (existingTrip) => {
+      Trip.findByIdAndUpdate(req.params.id).then(async (existingTrip) => {
         existingTrip.checkinStatus = true;
 
         existingTrip
           .save()
           .then(async (response) => {
             //todo:remove from users current and add to prev
-            let user = User.findByIdAndUpdate(req.user.id).then(
+            User.findByIdAndUpdate(req.user.id).then(
               (existingUser) => {
                 existingUser.currentTrip = null;
                 existingUser.prevTrips.unshift(trip);
+
+                existingUser.save().then(()=>{
+                  res.json("user checkedin")
+                });
               }
             );
-            await user.save();
+            
           })
           .catch((err) => res.status(400).json("Error: " + err));
       });
@@ -179,11 +188,14 @@ const scheduleTrips = async (req, res) => {
       .save()
       .then(async (newScheduledTrip) => {
         //todo: add to users scheduled trip
-        let user = User.findByIdAndUpdate(req.user.id).then((existingUser) => {
+        await User.findByIdAndUpdate(req.user.id).then(async (existingUser) => {
           existingUser.scheduledTrips.unshift(newScheduledTrip);
+          await existingUser.save().then(()=>{
+            res.json(newScheduledTrip);
+          });
         });
-        await user.save();
-        res.json(insertedSchedule);
+        
+        
       })
       .catch((err) => res.status(400).json("Error: " + err));
   } catch (err) {

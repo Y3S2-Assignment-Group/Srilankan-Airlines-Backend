@@ -5,6 +5,7 @@ const {
     addFlight,
     updateFlightStatus,
     getFlightList,
+    getFlightById
 } = require("../controllers/Flights.controller");
 
 //@route  POST api/addFlight
@@ -21,6 +22,11 @@ router.put("/", updateFlightStatus);
 //@desc   Get Flight List
 //@access Public
 router.get("/", getFlightList);
+
+//@route  GET api/getFlightList
+//@desc   Get Flight List
+//@access Public
+router.get("/:id", getFlightById);
 
 module.exports = router;
 

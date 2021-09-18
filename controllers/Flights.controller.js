@@ -1,12 +1,30 @@
 const Flight = require("../models/Flight.model");
 const Plane = require("../models/Plane.model");
 
+//get flight by Id
+const getFlightById = async (req, res) => {
+  try {
+    const flights = await Flight.findById(req.params.id)
+      .populate({ path: "seats", model: "Seat" })
+      .populate({
+        path: "plane",
+      });
+    res.json(flights);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server Error");
+  }
+};
 
 //get all flights
 const getFlightList = async (req, res) => {
   try {
-    const flights = await Flight.find()
-      // .populate({ path: "seats", model: "Seat" })
+    const flights = await Flight.find().populate({
+      path: "seats",
+      model: "Seat",
+    }).populate({
+      path: "plane",
+    });
     res.json(flights);
   } catch (err) {
     console.log(err.message);
@@ -73,9 +91,9 @@ const updateFlightStatus = async (req, res) => {
 
 //Booking seats
 
-
 module.exports = {
   addFlight,
   updateFlightStatus,
   getFlightList,
+  getFlightById,
 };

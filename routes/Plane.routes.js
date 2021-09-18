@@ -2,13 +2,18 @@ const express = require("express");
 const router = express.Router();
 
 const {
-    addPlane,getPlaneList
+    addPlane,getPlaneList,getPlaneById
 } = require("../controllers/Plane.controller");
 
 //@route  GET api/feedback
 //@desc   Get plane list
 //@access Public
-router.get("/getlist", getPlaneList);
+router.get("/:id", getPlaneById);
+
+//@route  GET api/feedback
+//@desc   Get plane list
+//@access Public
+router.get("/", getPlaneList);
 
 //@route  POST api/plane/add
 //@desc   Add plane
