@@ -30,7 +30,7 @@ const addOffers = async (req, res) => {
 
   try {
     //create a user instance
-    const offers = new Feedback({
+    const offers = new Offer({
       destination, 
       percentages, 
       ticketPrice, 
