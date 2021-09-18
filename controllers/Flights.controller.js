@@ -1,4 +1,4 @@
-const Flight = require("../models/Trip.model");
+const Flight = require("../models/Flight.model");
 const Plane = require("../models/Plane.model");
 
 
@@ -6,7 +6,7 @@ const Plane = require("../models/Plane.model");
 const getFlightList = async (req, res) => {
   try {
     const flights = await Flight.find()
-      .populate({ path: "seats", model: "Seat" })
+      // .populate({ path: "seats", model: "Seat" })
     res.json(flights);
   } catch (err) {
     console.log(err.message);
@@ -35,9 +35,9 @@ const addFlight = async (req, res) => {
     await flight
       .save()
       .then(async (insertedFlight) => {
-        const plane = await Plane.findById(insertedFlight.plane._id);
-        plane.flight.unshift(insertedFlight);
-        await plane.save();
+        const updatePlane = await Plane.findById(plane);
+        updatePlane.flight.unshift(insertedFlight);
+        await updatePlane.save();
 
         res.json(insertedFlight);
       })

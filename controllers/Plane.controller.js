@@ -1,5 +1,16 @@
 const Plane = require("../models/Plane.model");
 
+//get all planes
+const getPlaneList = async (req, res) => {
+  try {
+    const plane = await Plane.find();
+    res.json(plane);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
 //Insert plane to the system
 const addPlane = async (req, res) => {
   const { planeNo, planeImg } = req.body;
@@ -27,4 +38,5 @@ const addPlane = async (req, res) => {
 
 module.exports = {
   addPlane,
+  getPlaneList
 };

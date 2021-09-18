@@ -1,8 +1,7 @@
 const User = require("../models/User.model");
-const Flight = require("../models/Flight.model");
 const Trip = require("../models/Trip.model");
 const Seat = require("../models/Seat.model");
-
+const Flight = require("../models/Flight.model");
 
 //get User details
 const getUserDetails = async (req, res) => {
@@ -40,7 +39,7 @@ const getUserDetailsByUserId = async (req, res) => {
 
 //book flights
 const bookTrip = async (req, res) => {
-  const { email, flightClass, seatNo, flight } = req.body;
+  const { flightClass, seatNo, flight } = req.body;
 
   try {
     //create a user instance
@@ -57,58 +56,69 @@ const bookTrip = async (req, res) => {
       .save()
       .then(async (insertedTrip) => {
         //todo: add to users current trip
-        const user = User.findOneAndUpdate({ email: email }).then(
-          (existingUser) => {
-            existingUser.currentTrip = insertedTrip;
+        await User.findByIdAndUpdate(req.user.id).then(async (existingUser) => {
+          existingUser.currentTrip = insertedTrip;
+          //09A
+          //todo:mark seat in trip
+          let xVal = 0;
+          switch (seatNo.substring(2, 3)) {
+            case "A":
+              xVal = 0;
+              break;
+            case "B":
+              xVal = 1;
+              break;
+            case "C":
+              xVal = 2;
+              break;
+            case "D":
+              xVal = 3;
+              break;
+            case "E":
+              xVal = 4;
+              break;
+            case "F":
+              xVal = 5;
+              break;
+            case "G":
+              xVal = 6;
+              break;
+            case "H":
+              xVal = 7;
+              break;
+            case "I":
+              xVal = 8;
+              break;
           }
-        );
-        //09A
-        //todo:mark seat in trip
-        let xVal = 0;
-        switch (seatNo.substring(2, 3)) {
-          case "A":
-            xVal = 0;
-            break;
-          case "B":
-            xVal = 1;
-            break;
-          case "C":
-            xVal = 2;
-            break;
-          case "D":
-            xVal = 3;
-            break;
-          case "E":
-            xVal = 4;
-            break;
-          case "F":
-            xVal = 5;
-            break;
-          case "G":
-            xVal = 6;
-            break;
-          case "H":
-            xVal = 7;
-            break;
-          case "I":
-            xVal = 8;
-            break;
-        }
-        const seat = new Seat({
-          xAxis: xVal,
-          yAxis: Number(seatNo.substring(0, 2)),
-          flight: insertedTrip.flight,
-        });
-        insertedTrip.flight.seats.un;
-
-        user
-          .save()
-          .then(() => {
-            res.json(insertedTrip);
-          })
-          .catch((err) => {
-            res.json(err);
+          const seat = new Seat({
+            xAxis: xVal,
+            yAxis: Number(seatNo.substring(0, 2)),
+            flight: insertedTrip.flight,
           });
+
+          await Flight.findByIdAndUpdate(insertedTrip.flight).then(
+            (existingFlight) => {
+              //console.log(existingFlight);
+              existingFlight.seats.unshift(seat);
+
+              existingFlight
+                .save()
+                .then(() => {
+                  existingUser
+                    .save()
+                    .then(() => {
+                      res.json(insertedTrip);
+                    })
+                    .catch((err) => {
+                      res.json(err);
+                    });
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            }
+          );
+        });
       })
       .catch((err) => res.status(400).json("Error: " + err));
   } catch (err) {
@@ -132,7 +142,7 @@ const checkinTrip = async (req, res) => {
           .save()
           .then(async (response) => {
             //todo:remove from users current and add to prev
-            let user = User.findOneAndUpdate({ email: email }).then(
+            let user = User.findByIdAndUpdate(req.user.id).then(
               (existingUser) => {
                 existingUser.currentTrip = null;
                 existingUser.prevTrips.unshift(trip);
@@ -167,9 +177,12 @@ const scheduleTrips = async (req, res) => {
     //save user to the database
     await trip
       .save()
-      .then(async (insertedSchedule) => {
+      .then(async (newScheduledTrip) => {
         //todo: add to users scheduled trip
-
+        let user = User.findByIdAndUpdate(req.user.id).then((existingUser) => {
+          existingUser.scheduledTrips.unshift(newScheduledTrip);
+        });
+        await user.save();
         res.json(insertedSchedule);
       })
       .catch((err) => res.status(400).json("Error: " + err));
@@ -179,6 +192,7 @@ const scheduleTrips = async (req, res) => {
     return res.status(500).send("Server Error");
   }
 };
+
 module.exports = {
   getUserDetails,
   getUserDetailsByUserId,

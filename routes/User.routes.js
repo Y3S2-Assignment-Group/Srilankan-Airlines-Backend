@@ -24,11 +24,11 @@ router.get("/",auth, getUserDetails);
 
 router.get("/details/:id", getUserDetailsByUserId);
 
-router.post("/bookTrip", bookTrip);
+router.post("/bookTrip",auth, bookTrip);
 
-router.put("/checkIn/:id", checkinTrip);
+router.put("/checkIn/:id",auth, checkinTrip);
 
-router.post("/scheduleTrip", scheduleTrips);
+router.post("/scheduleTrip",auth, scheduleTrips);
 
 module.exports = router;
 
