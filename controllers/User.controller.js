@@ -8,7 +8,7 @@ const getUserDetails = async (req, res) => {
   try {
     //get user details
     //-password : dont return the pasword
-    const user = await User.findById(req.body.id)
+    const user = await User.findById(req.params.id)
       .select("-password")
       .populate({ path: "prevTrips", model: "Trip" })
       .populate({ path: "currentTrip", model: "Trip" })

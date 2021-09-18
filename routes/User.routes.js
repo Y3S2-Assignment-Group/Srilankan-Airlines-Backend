@@ -9,15 +9,21 @@ const {
     scheduleTrips,
 } = require("../controllers/User.controller");
 
-router.get("/details", getUserDetails);
+const {
+    loginUserWithGoogle, registerUser
+} = require("../controllers/AuthController.controller");
+
+router.get("/login", loginUserWithGoogle);
+
+router.get("/register", registerUser);
+
+router.get("/details/:id", getUserDetails);
 
 router.post("/bookTrip", bookTrip);
 
 router.put("/checkIn/:id", checkinTrip);
 
 router.post("/scheduleTrip", scheduleTrips);
-
-
 
 module.exports = router;
 
