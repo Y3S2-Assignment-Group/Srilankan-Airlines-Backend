@@ -20,9 +20,6 @@ const getFlightById = async (req, res) => {
 const getFlightList = async (req, res) => {
   try {
     const flights = await Flight.find().populate({
-      path: "seats",
-      model: "Seat",
-    }).populate({
       path: "plane",
     });
     res.json(flights);
