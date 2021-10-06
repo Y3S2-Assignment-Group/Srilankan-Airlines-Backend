@@ -5,8 +5,14 @@ const {
     addFlight,
     updateFlightStatus,
     getFlightList,
-    getFlightById
+    getFlightById,
+    updateFlightBookingSeats
 } = require("../controllers/Flights.controller");
+
+//@route  POST api/flightbookseat
+//@desc   Book seats
+//@access Public
+router.post("/flightbookseat", updateFlightBookingSeats);
 
 //@route  POST api/addFlight
 //@desc   Add Flights

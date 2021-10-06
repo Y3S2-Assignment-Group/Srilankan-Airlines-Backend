@@ -36,6 +36,21 @@ const getFlightList = async (req, res) => {
 const addFlight = async (req, res) => {
   const { to, from, departure, arrival, gate, plane } = req.body;
 
+  const seats = [
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+  ];
+
+
   try {
     //create a user instance
     const flight = new Flight({
@@ -44,7 +59,7 @@ const addFlight = async (req, res) => {
       departure,
       arrival,
       gate,
-      seats: [],
+      seats,
       status: "Scheduled",
       plane,
     });
@@ -90,10 +105,31 @@ const updateFlightStatus = async (req, res) => {
 };
 
 //Booking seats
+const updateFlightBookingSeats = async (req, res) => {
+  try {
+    const flight = await Flight.findById(req.params.id);
+
+    if (flight != null) {
+      Flight.findByIdAndUpdate(req.params.id).then(async (existingFlight) => {
+        existingFlight.seats = req.body.seats;
+
+        existingFlight
+          .save()
+          .then((response) => res.json(response))
+          .catch((err) => res.status(400).json("Error: " + err));
+      });
+    }
+  } catch (err) {
+    //Something wrong with the server
+    console.error(err.message);
+    return res.status(500).send("Server Error");
+  }
+};
 
 module.exports = {
   addFlight,
   updateFlightStatus,
   getFlightList,
   getFlightById,
+  updateFlightBookingSeats
 };

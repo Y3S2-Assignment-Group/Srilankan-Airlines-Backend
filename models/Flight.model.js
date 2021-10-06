@@ -19,8 +19,7 @@ const FlightSchema = new Schema({
   },
   seats: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Seat",
+      type: Array,
     },
   ],
   status: {
