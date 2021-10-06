@@ -12,7 +12,7 @@ const {
 //@route  POST api/flightbookseat
 //@desc   Book seats
 //@access Public
-router.post("/flightbookseat", updateFlightBookingSeats);
+router.post("/flightbookseat/:id", updateFlightBookingSeats);
 
 //@route  POST api/addFlight
 //@desc   Add Flights

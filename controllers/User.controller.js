@@ -10,9 +10,24 @@ const getUserDetails = async (req, res) => {
     //-password : dont return the pasword
     const user = await User.findById(req.user.id)
       .select("-password")
-      .populate({ path: "prevTrips", model: "Trip" })
-      .populate({ path: "currentTrip", model: "Trip" })
-      .populate({ path: "scheduledTrips", model: "Trip" });
+      .populate({
+        path: "prevTrips",
+        populate: {
+          path: "flight",
+        },
+      })
+      .populate({
+        path: "currentTrip",
+        populate: {
+          path: "flight",
+        },
+      })
+      .populate({
+        path: "scheduledTrips",
+        populate: {
+          path: "flight",
+        },
+      });
     res.json(user);
   } catch (err) {
     console.log(err.message);
