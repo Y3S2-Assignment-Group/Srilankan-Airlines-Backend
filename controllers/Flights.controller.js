@@ -5,7 +5,6 @@ const Plane = require("../models/Plane.model");
 const getFlightById = async (req, res) => {
   try {
     const flights = await Flight.findById(req.params.id)
-      .populate({ path: "seats", model: "Seat" })
       .populate({
         path: "plane",
       });
