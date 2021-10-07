@@ -35,6 +35,65 @@ const getUserDetails = async (req, res) => {
   }
 };
 
+
+//get User Previous Trips details
+const getUserPreviousTripsDetails = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id)
+      .select("prevTrips")
+      .populate({
+        path: "prevTrips",
+        populate: {
+          path: "flight",
+        },
+      });
+
+    res.json(user);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+
+//get User Schedule Trips details
+const getUserScheduleTripsDetails = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id)
+      .select("scheduledTrips")
+      .populate({
+        path: "scheduledTrips",
+        populate: {
+          path: "flight",
+        },
+      });
+    res.json(user);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+
+//get User Current Trip details
+const getUserCurrentTripDetails = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id)
+      .select("currentTrip")
+      .populate({
+        path: "currentTrip",
+        populate: {
+          path: "flight",
+        },
+      });
+
+    res.json(user);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
 //get User details
 const getUserDetailsByUserId = async (req, res) => {
   try {
@@ -158,4 +217,7 @@ module.exports = {
   bookTrip,
   checkinTrip,
   scheduleTrips,
+  getUserCurrentTripDetails,
+  getUserScheduleTripsDetails,
+  getUserPreviousTripsDetails
 };
