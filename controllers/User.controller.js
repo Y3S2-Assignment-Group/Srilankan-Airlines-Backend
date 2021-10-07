@@ -48,7 +48,7 @@ const getUserPreviousTripsDetails = async (req, res) => {
         },
       });
 
-    res.json(user);
+    res.json(user.prevTrips);
   } catch (err) {
     console.log(err.message);
     res.status(500).send("Server Error");
@@ -67,7 +67,7 @@ const getUserScheduleTripsDetails = async (req, res) => {
           path: "flight",
         },
       });
-    res.json(user);
+    res.json(user.scheduleTrips);
   } catch (err) {
     console.log(err.message);
     res.status(500).send("Server Error");
@@ -87,7 +87,7 @@ const getUserCurrentTripDetails = async (req, res) => {
         },
       });
 
-    res.json(user);
+    res.json(user.currentTrip);
   } catch (err) {
     console.log(err.message);
     res.status(500).send("Server Error");
