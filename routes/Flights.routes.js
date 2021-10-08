@@ -6,7 +6,8 @@ const {
     updateFlightStatus,
     getFlightList,
     getFlightById,
-    updateFlightBookingSeats
+    updateFlightBookingSeats,
+    getFlightByDestination
 } = require("../controllers/Flights.controller");
 
 //@route  POST api/flightbookseat
@@ -33,6 +34,11 @@ router.get("/", getFlightList);
 //@desc   Get Flight List
 //@access Public
 router.get("/:id", getFlightById);
+
+//@route  GET api/getFlightList
+//@desc   Get Flight List
+//@access Public
+router.get("/destination/:to", getFlightByDestination);
 
 module.exports = router;
 

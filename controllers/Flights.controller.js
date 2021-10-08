@@ -15,6 +15,21 @@ const getFlightById = async (req, res) => {
   }
 };
 
+
+//get flight by Destination
+const getFlightByDestination = async (req, res) => {
+  try {
+    const flight = await Flight.findOne({ to : req.params.to})
+      .populate({
+        path: "plane",
+      });
+    res.json(flight);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
 //get all flights
 const getFlightList = async (req, res) => {
   try {
@@ -127,5 +142,6 @@ module.exports = {
   updateFlightStatus,
   getFlightList,
   getFlightById,
-  updateFlightBookingSeats
+  updateFlightBookingSeats,
+  getFlightByDestination
 };
