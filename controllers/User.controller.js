@@ -67,7 +67,8 @@ const getUserScheduleTripsDetails = async (req, res) => {
           path: "flight",
         },
       });
-    res.json(user.scheduleTrips);
+
+    res.json(user.scheduledTrips);
   } catch (err) {
     console.log(err.message);
     res.status(500).send("Server Error");
