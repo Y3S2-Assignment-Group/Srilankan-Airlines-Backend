@@ -120,9 +120,20 @@ const updateFlightBookingSeats = async (req, res) => {
   try {
     const flight = await Flight.findById(req.params.id);
 
+    let nestedSeatArray = req.body.seats;
+    for ( i=0; i<nestedSeatArray.length; i++ )
+    {
+      for ( j=0; j<nestedSeatArray[i].length; j++ )
+      {
+        if(nestedSeatArray[i][j] == 2){
+          nestedSeatArray[i][j] = 3;
+        }
+      }
+    }
+
     if (flight != null) {
       Flight.findByIdAndUpdate(req.params.id).then(async (existingFlight) => {
-        existingFlight.seats = req.body.seats;
+        existingFlight.seats = nestedSeatArray;
 
         existingFlight
           .save()
